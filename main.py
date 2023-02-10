@@ -17,6 +17,8 @@ dispatcher = Dispatcher(bot)
 
 ANCIENT, VOID, SACRED = "💙 Древний", "💜 Темный", "💛 Сакрал"
 
+close_keyboard_button = InlineKeyboardButton(text="Закрыть", callback_data="close")
+
 
 @dispatcher.message_handler(commands='start')
 async def start_handler(message: types.Message) -> None:
@@ -43,42 +45,37 @@ async def help(message: types.Message) -> None:
 
 
 @dispatcher.message_handler(content_types=types.ContentTypes.TEXT)
-async def mess(message: types.Message):
+async def messages(message: types.Message):
     if message.text == "Роковая башня":
         keyboard = InlineKeyboardMarkup(row_width=2) \
             .add(InlineKeyboardButton(text="Легкая", callback_data="doom_tower_easy"),
-                 InlineKeyboardButton(text="Сложная", callback_data="doom_tower_hard")) \
-            .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+                 InlineKeyboardButton(text="Сложная", callback_data="doom_tower_hard")).row(close_keyboard_button)
         await message.answer("Роковая башня", reply_markup=keyboard)
 
     if message.text == "Клан босс":
         keyboard = InlineKeyboardMarkup(row_width=3) \
             .add(InlineKeyboardButton(text="4 КБ", callback_data="clan_boss_4CB"),
                  InlineKeyboardButton(text="5 КБ", callback_data="clan_boss_5CB"),
-                 InlineKeyboardButton(text="6 КБ", callback_data="clan_boss_6CB")) \
-            .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+                 InlineKeyboardButton(text="6 КБ", callback_data="clan_boss_6CB")).row(close_keyboard_button)
         await message.answer("Клан босс", reply_markup=keyboard)
 
     if message.text == "Арена":
         keyboard = InlineKeyboardMarkup(row_width=2) \
             .add(InlineKeyboardButton(text="Обычная", callback_data="arena_normal"),
-                 InlineKeyboardButton(text="Групповая", callback_data="arena_group")) \
-            .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+                 InlineKeyboardButton(text="Групповая", callback_data="arena_group")).row(close_keyboard_button)
         await message.answer("Арена", reply_markup=keyboard)
 
     if message.text == "События / Турниры":
         keyboard = InlineKeyboardMarkup(row_width=2) \
             .add(InlineKeyboardButton(text="События", callback_data="events"),
-                 InlineKeyboardButton(text="Турниры", callback_data="tournaments")) \
-            .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+                 InlineKeyboardButton(text="Турниры", callback_data="tournaments")).row(close_keyboard_button)
         await message.answer("События / Турниры", reply_markup=keyboard)
 
     if message.text == "Клан":
         keyboard = InlineKeyboardMarkup(row_width=2) \
             .add(InlineKeyboardButton(text="Сундук", callback_data="clan_chest"),
                  InlineKeyboardButton(text="Магазин", callback_data="clan_shop"),
-                 InlineKeyboardButton(text="Турнир кланов", callback_data="clan_wars")) \
-            .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+                 InlineKeyboardButton(text="Турнир кланов", callback_data="clan_wars")).row(close_keyboard_button)
         await message.answer("Клан", reply_markup=keyboard)
 
     if message.text == "Другое":
@@ -88,8 +85,7 @@ async def mess(message: types.Message):
                  InlineKeyboardButton(text="Вход", callback_data="other_input"),
                  InlineKeyboardButton(text="Миссии", callback_data="other_missions"),
                  InlineKeyboardButton(text="Задания", callback_data="other_tasks"),
-                 InlineKeyboardButton(text="Магазин", callback_data="other_shop")) \
-            .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+                 InlineKeyboardButton(text="Магазин", callback_data="other_shop")).row(close_keyboard_button)
         await message.answer("Другое", reply_markup=keyboard)
 
 
@@ -104,7 +100,8 @@ async def doom_tower_easy_call(callback: types.CallbackQuery):
     keyboard = InlineKeyboardMarkup(row_width=2) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="doom_tower_hard_ancient"),
              InlineKeyboardButton(text=VOID, callback_data="doom_tower_hard_void")) \
-        .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+        .row(InlineKeyboardButton(text="Вернуться", callback_data="doom_tower_return"),
+             InlineKeyboardButton(text="Закрыть", callback_data="close"))
     await callback.message.edit_text("Легкая", reply_markup=keyboard)
     await callback.answer()
 
@@ -115,8 +112,18 @@ async def doom_tower_hard_call(callback: types.CallbackQuery):
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="doom_tower_hard_ancient"),
              InlineKeyboardButton(text=VOID, callback_data="doom_tower_hard_void"),
              InlineKeyboardButton(text=SACRED, callback_data="doom_tower_hard_sacred")) \
-        .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+        .row(InlineKeyboardButton(text="Вернуться", callback_data="doom_tower_return"),
+             InlineKeyboardButton(text="Закрыть", callback_data="close"))
     await callback.message.edit_text("Сложная", reply_markup=keyboard)
+    await callback.answer()
+
+
+@dispatcher.callback_query_handler(text="doom_tower_return")
+async def doom_tower_return_call(callback: types.CallbackQuery):
+    keyboard = InlineKeyboardMarkup(row_width=2) \
+        .add(InlineKeyboardButton(text="Легкая", callback_data="doom_tower_easy"),
+             InlineKeyboardButton(text="Сложная", callback_data="doom_tower_hard")).row(close_keyboard_button)
+    await callback.message.edit_text("Роковая башня", reply_markup=keyboard)
     await callback.answer()
 
 
@@ -125,7 +132,8 @@ async def clan_boss_4CB_call(callback: types.CallbackQuery):
     keyboard = InlineKeyboardMarkup(row_width=2) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="clan_boss_4CB_ancient"),
              InlineKeyboardButton(text=VOID, callback_data="clan_boss_4CB_void")) \
-        .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+        .row(InlineKeyboardButton(text="Вернуться", callback_data="clan_boss_return"),
+             InlineKeyboardButton(text="Закрыть", callback_data="close"))
     await callback.message.edit_text("4 Клан босс", reply_markup=keyboard)
     await callback.answer()
 
@@ -136,7 +144,8 @@ async def clan_boss_5CB_call(callback: types.CallbackQuery):
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="clan_boss_5CB_ancient"),
              InlineKeyboardButton(text=VOID, callback_data="clan_boss_5CB_void"),
              InlineKeyboardButton(text=SACRED, callback_data="clan_boss_5CB_sacred")) \
-        .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+        .row(InlineKeyboardButton(text="Вернуться", callback_data="clan_boss_return"),
+             InlineKeyboardButton(text="Закрыть", callback_data="close"))
     await callback.message.edit_text("5 Клан босс", reply_markup=keyboard)
     await callback.answer()
 
@@ -147,8 +156,19 @@ async def clan_boss_6CB_call(callback: types.CallbackQuery):
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="clan_boss_6CB_ancient"),
              InlineKeyboardButton(text=VOID, callback_data="clan_boss_6CB_void"),
              InlineKeyboardButton(text=SACRED, callback_data="clan_boss_6CB_sacred")) \
-        .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+        .row(InlineKeyboardButton(text="Вернуться", callback_data="clan_boss_return"),
+             InlineKeyboardButton(text="Закрыть", callback_data="close"))
     await callback.message.edit_text("6 Клан босс", reply_markup=keyboard)
+    await callback.answer()
+
+
+@dispatcher.callback_query_handler(text="clan_boss_return")
+async def clan_boss_return_call(callback: types.CallbackQuery):
+    keyboard = InlineKeyboardMarkup(row_width=3) \
+        .add(InlineKeyboardButton(text="4 КБ", callback_data="clan_boss_4CB"),
+             InlineKeyboardButton(text="5 КБ", callback_data="clan_boss_5CB"),
+             InlineKeyboardButton(text="6 КБ", callback_data="clan_boss_6CB")).row(close_keyboard_button)
+    await callback.message.edit_text("Клан босс", reply_markup=keyboard)
     await callback.answer()
 
 
@@ -158,7 +178,8 @@ async def arena_normal_call(callback: types.CallbackQuery):
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="arena_normal_ancient"),
              InlineKeyboardButton(text=VOID, callback_data="arena_normal_void"),
              InlineKeyboardButton(text=SACRED, callback_data="arena_normal_sacred")) \
-        .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+        .row(InlineKeyboardButton(text="Вернуться", callback_data="arena_return"),
+             InlineKeyboardButton(text="Закрыть", callback_data="close"))
     await callback.message.edit_text("Обычная арена", reply_markup=keyboard)
     await callback.answer()
 
@@ -169,8 +190,18 @@ async def arena_group_call(callback: types.CallbackQuery):
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="arena_group_ancient"),
              InlineKeyboardButton(text=VOID, callback_data="arena_group_void"),
              InlineKeyboardButton(text=SACRED, callback_data="arena_group_sacred")) \
-        .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+        .row(InlineKeyboardButton(text="Вернуться", callback_data="arena_return"),
+             InlineKeyboardButton(text="Закрыть", callback_data="close"))
     await callback.message.edit_text("Групповая арена", reply_markup=keyboard)
+    await callback.answer()
+
+
+@dispatcher.callback_query_handler(text="arena_return")
+async def arena_return_call(callback: types.CallbackQuery):
+    keyboard = InlineKeyboardMarkup(row_width=2) \
+        .add(InlineKeyboardButton(text="Обычная", callback_data="arena_normal"),
+             InlineKeyboardButton(text="Групповая", callback_data="arena_group")).row(close_keyboard_button)
+    await callback.message.edit_text("Арена", reply_markup=keyboard)
     await callback.answer()
 
 
@@ -180,7 +211,8 @@ async def events_call(callback: types.CallbackQuery):
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="events_ancient"),
              InlineKeyboardButton(text=VOID, callback_data="events_void"),
              InlineKeyboardButton(text=SACRED, callback_data="events_sacred")) \
-        .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+        .row(InlineKeyboardButton(text="Вернуться", callback_data="events_return"),
+             InlineKeyboardButton(text="Закрыть", callback_data="close"))
     await callback.message.edit_text("События", reply_markup=keyboard)
     await callback.answer()
 
@@ -191,8 +223,18 @@ async def tournaments_call(callback: types.CallbackQuery):
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="tournaments_ancient"),
              InlineKeyboardButton(text=VOID, callback_data="tournaments_void"),
              InlineKeyboardButton(text=SACRED, callback_data="tournaments_sacred")) \
-        .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+        .row(InlineKeyboardButton(text="Вернуться", callback_data="tournaments_return"),
+             InlineKeyboardButton(text="Закрыть", callback_data="close"))
     await callback.message.edit_text("Турниры", reply_markup=keyboard)
+    await callback.answer()
+
+
+@dispatcher.callback_query_handler(text=["events_return", "tournaments_return"])
+async def events_tournaments_return_call(callback: types.CallbackQuery):
+    keyboard = InlineKeyboardMarkup(row_width=2) \
+        .add(InlineKeyboardButton(text="События", callback_data="events"),
+             InlineKeyboardButton(text="Турниры", callback_data="tournaments")).row(close_keyboard_button)
+    await callback.message.edit_text("События / Турниры", reply_markup=keyboard)
     await callback.answer()
 
 
@@ -202,7 +244,8 @@ async def clan_wars_call(callback: types.CallbackQuery):
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="clan_wars_ancient"),
              InlineKeyboardButton(text=VOID, callback_data="clan_wars_void"),
              InlineKeyboardButton(text=SACRED, callback_data="clan_wars_sacred")) \
-        .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+        .row(InlineKeyboardButton(text="Вернуться", callback_data="clan_return"),
+             InlineKeyboardButton(text="Закрыть", callback_data="close"))
     await callback.message.edit_text("Клановые войны", reply_markup=keyboard)
     await callback.answer()
 
@@ -211,7 +254,8 @@ async def clan_wars_call(callback: types.CallbackQuery):
 async def clan_chest_call(callback: types.CallbackQuery):
     keyboard = InlineKeyboardMarkup(row_width=1) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="clan_chest_ancient")) \
-        .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+        .row(InlineKeyboardButton(text="Вернуться", callback_data="clan_return"),
+             InlineKeyboardButton(text="Закрыть", callback_data="close"))
     await callback.message.edit_text("Клановый сундук", reply_markup=keyboard)
     await callback.answer()
 
@@ -220,8 +264,19 @@ async def clan_chest_call(callback: types.CallbackQuery):
 async def clan_shop_call(callback: types.CallbackQuery):
     keyboard = InlineKeyboardMarkup(row_width=1) \
         .add(InlineKeyboardButton(text=VOID, callback_data="clan_shop_void")) \
-        .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+        .row(InlineKeyboardButton(text="Вернуться", callback_data="clan_return"),
+             InlineKeyboardButton(text="Закрыть", callback_data="close"))
     await callback.message.edit_text("Клановый магазин", reply_markup=keyboard)
+    await callback.answer()
+
+
+@dispatcher.callback_query_handler(text="clan_return")
+async def clan_return_call(callback: types.CallbackQuery):
+    keyboard = InlineKeyboardMarkup(row_width=2) \
+        .add(InlineKeyboardButton(text="Сундук", callback_data="clan_chest"),
+             InlineKeyboardButton(text="Магазин", callback_data="clan_shop"),
+             InlineKeyboardButton(text="Турнир кланов", callback_data="clan_wars")).row(close_keyboard_button)
+    await callback.message.edit_text("Клан", reply_markup=keyboard)
     await callback.answer()
 
 
@@ -229,7 +284,8 @@ async def clan_shop_call(callback: types.CallbackQuery):
 async def other_dungeons_call(callback: types.CallbackQuery):
     keyboard = InlineKeyboardMarkup(row_width=1) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="other_dungeons_ancient")) \
-        .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+        .row(InlineKeyboardButton(text="Вернуться", callback_data="other_return"),
+             InlineKeyboardButton(text="Закрыть", callback_data="close"))
     await callback.message.edit_text("Подземка", reply_markup=keyboard)
     await callback.answer()
 
@@ -238,7 +294,8 @@ async def other_dungeons_call(callback: types.CallbackQuery):
 async def other_bazaar_call(callback: types.CallbackQuery):
     keyboard = InlineKeyboardMarkup(row_width=1) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="other_bazaar_ancient")) \
-        .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+        .row(InlineKeyboardButton(text="Вернуться", callback_data="other_return"),
+             InlineKeyboardButton(text="Закрыть", callback_data="close"))
     await callback.message.edit_text("Базар", reply_markup=keyboard)
     await callback.answer()
 
@@ -248,7 +305,8 @@ async def other_input_call(callback: types.CallbackQuery):
     keyboard = InlineKeyboardMarkup(row_width=2) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="other_input_ancient"),
              InlineKeyboardButton(text=VOID, callback_data="other_input_void")) \
-        .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+        .row(InlineKeyboardButton(text="Вернуться", callback_data="other_return"),
+             InlineKeyboardButton(text="Закрыть", callback_data="close"))
     await callback.message.edit_text("Вход", reply_markup=keyboard)
     await callback.answer()
 
@@ -258,7 +316,8 @@ async def other_missions_call(callback: types.CallbackQuery):
     keyboard = InlineKeyboardMarkup(row_width=2) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="other_missions_ancient"),
              InlineKeyboardButton(text=VOID, callback_data="other_missions_void")) \
-        .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+        .row(InlineKeyboardButton(text="Вернуться", callback_data="other_return"),
+             InlineKeyboardButton(text="Закрыть", callback_data="close"))
     await callback.message.edit_text("Миссии", reply_markup=keyboard)
     await callback.answer()
 
@@ -269,7 +328,8 @@ async def other_tasks_call(callback: types.CallbackQuery):
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="other_tasks_ancient"),
              InlineKeyboardButton(text=VOID, callback_data="other_tasks_void"),
              InlineKeyboardButton(text=SACRED, callback_data="other_tasks_sacred")) \
-        .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+        .row(InlineKeyboardButton(text="Вернуться", callback_data="other_return"),
+             InlineKeyboardButton(text="Закрыть", callback_data="close"))
     await callback.message.edit_text("Задания", reply_markup=keyboard)
     await callback.answer()
 
@@ -278,8 +338,22 @@ async def other_tasks_call(callback: types.CallbackQuery):
 async def other_shop_call(callback: types.CallbackQuery):
     keyboard = InlineKeyboardMarkup(row_width=1) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="other_shop_void")) \
-        .row(InlineKeyboardButton(text="Закрыть", callback_data="close"))
+        .row(InlineKeyboardButton(text="Вернуться", callback_data="other_return"),
+             InlineKeyboardButton(text="Закрыть", callback_data="close"))
     await callback.message.edit_text("Магазин", reply_markup=keyboard)
+    await callback.answer()
+
+
+@dispatcher.callback_query_handler(text="other_return")
+async def other_return_call(callback: types.CallbackQuery):
+    keyboard = InlineKeyboardMarkup(row_width=2) \
+        .add(InlineKeyboardButton(text="Подземка", callback_data="other_dungeons"),
+             InlineKeyboardButton(text="Рынок", callback_data="other_bazaar"),
+             InlineKeyboardButton(text="Вход", callback_data="other_input"),
+             InlineKeyboardButton(text="Миссии", callback_data="other_missions"),
+             InlineKeyboardButton(text="Задания", callback_data="other_tasks"),
+             InlineKeyboardButton(text="Магазин", callback_data="other_shop")).row(close_keyboard_button)
+    await callback.message.edit_text("Клан", reply_markup=keyboard)
     await callback.answer()
 
 
