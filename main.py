@@ -1,3 +1,4 @@
+import datetime
 import logging
 import json
 from aiogram import Bot, Dispatcher, executor, types
@@ -101,8 +102,8 @@ async def messages(message: types.Message):
 
 @dispatcher.callback_query_handler(text="close")
 async def close_call(callback: types.CallbackQuery):
-    if callback.message.chat.id in user_dict:
-        user_dict.pop(callback.message.chat.id)
+    if callback.from_user.id in user_dict:
+        user_dict.pop(callback.from_user.id)
 
     await callback.message.edit_text("До встречи")
     await callback.answer()
@@ -110,9 +111,9 @@ async def close_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="doom_tower_easy")
 async def doom_tower_easy_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = "Легкая"
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
     keyboard = InlineKeyboardMarkup(row_width=2) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="ancient"),
@@ -124,9 +125,9 @@ async def doom_tower_easy_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="doom_tower_hard")
 async def doom_tower_hard_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = "Сложная"
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
     keyboard = InlineKeyboardMarkup(row_width=3) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="ancient"),
@@ -139,9 +140,9 @@ async def doom_tower_hard_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="doom_tower_return")
 async def doom_tower_return_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = ""
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
     keyboard = InlineKeyboardMarkup(row_width=2) \
         .add(InlineKeyboardButton(text="Легкая", callback_data="doom_tower_easy"),
@@ -152,9 +153,9 @@ async def doom_tower_return_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="clan_boss_4CB")
 async def clan_boss_4CB_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = "4"
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
     keyboard = InlineKeyboardMarkup(row_width=2) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="ancient"),
@@ -166,9 +167,9 @@ async def clan_boss_4CB_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="clan_boss_5CB")
 async def clan_boss_5CB_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = "5"
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
     keyboard = InlineKeyboardMarkup(row_width=3) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="ancient"),
@@ -181,9 +182,9 @@ async def clan_boss_5CB_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="clan_boss_6CB")
 async def clan_boss_6CB_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = "6"
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
     keyboard = InlineKeyboardMarkup(row_width=3) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="ancient"),
@@ -196,9 +197,9 @@ async def clan_boss_6CB_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="clan_boss_return")
 async def clan_boss_return_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = ""
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
     keyboard = InlineKeyboardMarkup(row_width=3) \
         .add(InlineKeyboardButton(text="4 КБ", callback_data="clan_boss_4CB"),
@@ -210,9 +211,9 @@ async def clan_boss_return_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="arena_normal")
 async def arena_normal_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = "Обычная"
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
     keyboard = InlineKeyboardMarkup(row_width=3) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="ancient"),
@@ -225,9 +226,9 @@ async def arena_normal_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="arena_group")
 async def arena_group_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = "Групповая"
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
     keyboard = InlineKeyboardMarkup(row_width=3) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="ancient"),
@@ -240,9 +241,9 @@ async def arena_group_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="arena_return")
 async def arena_return_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = ""
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
     keyboard = InlineKeyboardMarkup(row_width=2) \
         .add(InlineKeyboardButton(text="Обычная", callback_data="arena_normal"),
@@ -253,9 +254,9 @@ async def arena_return_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="events")
 async def events_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = "События"
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
     keyboard = InlineKeyboardMarkup(row_width=3) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="ancient"),
@@ -268,9 +269,9 @@ async def events_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="tournaments")
 async def tournaments_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = "Турниры"
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
     keyboard = InlineKeyboardMarkup(row_width=3) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="ancient"),
@@ -283,9 +284,9 @@ async def tournaments_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text=["events_return", "tournaments_return"])
 async def events_tournaments_return_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = ""
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
     keyboard = InlineKeyboardMarkup(row_width=2) \
         .add(InlineKeyboardButton(text="События", callback_data="events"),
@@ -296,9 +297,9 @@ async def events_tournaments_return_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="clan_wars")
 async def clan_wars_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = "Клановые войны"
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
     keyboard = InlineKeyboardMarkup(row_width=3) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="ancient"),
@@ -311,9 +312,9 @@ async def clan_wars_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="clan_chest")
 async def clan_chest_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = "Клановый сундук"
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
     keyboard = InlineKeyboardMarkup(row_width=1) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="ancient")) \
@@ -324,9 +325,9 @@ async def clan_chest_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="clan_shop")
 async def clan_shop_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = "Клановый магазин"
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
     keyboard = InlineKeyboardMarkup(row_width=1) \
         .add(InlineKeyboardButton(text=VOID, callback_data="void")) \
@@ -337,9 +338,9 @@ async def clan_shop_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="clan_return")
 async def clan_return_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = ""
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
     keyboard = InlineKeyboardMarkup(row_width=2) \
         .add(InlineKeyboardButton(text="Сундук", callback_data="clan_chest"),
@@ -351,9 +352,9 @@ async def clan_return_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="other_dungeons")
 async def other_dungeons_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = "Подземка"
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
     keyboard = InlineKeyboardMarkup(row_width=1) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="ancient")) \
@@ -364,9 +365,9 @@ async def other_dungeons_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="other_bazaar")
 async def other_bazaar_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = "Базар"
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
     keyboard = InlineKeyboardMarkup(row_width=1) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="ancient")) \
@@ -377,9 +378,9 @@ async def other_bazaar_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="other_input")
 async def other_input_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = "Вход"
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
     keyboard = InlineKeyboardMarkup(row_width=2) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="ancient"),
@@ -391,9 +392,9 @@ async def other_input_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="other_missions")
 async def other_missions_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = "Миссии"
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
     keyboard = InlineKeyboardMarkup(row_width=2) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="ancient"),
@@ -405,11 +406,11 @@ async def other_missions_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="other_tasks")
 async def other_tasks_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = "Задания"
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
-    keyboard = InlineKeyboardMarkup(row_width=1) \
+    keyboard = InlineKeyboardMarkup(row_width=3) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="ancient"),
              InlineKeyboardButton(text=VOID, callback_data="void"),
              InlineKeyboardButton(text=SACRED, callback_data="sacred")) \
@@ -420,9 +421,9 @@ async def other_tasks_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="other_shop")
 async def other_shop_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = "Магазин"
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
     keyboard = InlineKeyboardMarkup(row_width=1) \
         .add(InlineKeyboardButton(text=ANCIENT, callback_data="ancient")) \
@@ -433,9 +434,9 @@ async def other_shop_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="other_return")
 async def other_return_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
+    temp = user_dict[int(callback.from_user.id)]
     temp[1] = ""
-    user_dict[int(callback.message.chat.id)] = temp
+    user_dict[int(callback.from_user.id)] = temp
 
     keyboard = InlineKeyboardMarkup(row_width=2) \
         .add(InlineKeyboardButton(text="Подземка", callback_data="other_dungeons"),
@@ -450,30 +451,45 @@ async def other_return_call(callback: types.CallbackQuery):
 
 @dispatcher.callback_query_handler(text="ancient")
 async def ancient_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
-    if callback.message.chat.id in user_dict:
-        user_dict.pop(callback.message.chat.id)
-    await callback.message.edit_text(f"Добавлен {ANCIENT.lower()} осколок в {temp[0]}, {temp[1]}")
+    temp = user_dict[int(callback.from_user.id)]
+    await send_request(callback.from_user.id, "ancient", temp)
+    if callback.from_user.id in user_dict:
+        user_dict.pop(callback.from_user.id)
+    await callback.message.edit_text(f"Добавлен '{ANCIENT}' осколок в '{temp[0]}, {temp[1]}'")
     await callback.answer()
 
 
 @dispatcher.callback_query_handler(text="void")
 async def ancient_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
-    if callback.message.chat.id in user_dict:
-        user_dict.pop(callback.message.chat.id)
-    await callback.message.edit_text(f"Добавлен {VOID.lower()} осколок в {temp[0]}, {temp[1]}")
+    temp = user_dict[int(callback.from_user.id)]
+    await send_request(callback.from_user.id, "void", temp)
+    if callback.from_user.id in user_dict:
+        user_dict.pop(callback.from_user.id)
+    await callback.message.edit_text(f"Добавлен '{VOID}' осколок в '{temp[0]}, {temp[1]}'")
     await callback.answer()
 
 
 @dispatcher.callback_query_handler(text="sacred")
 async def ancient_call(callback: types.CallbackQuery):
-    temp = user_dict[int(callback.message.chat.id)]
-    if callback.message.chat.id in user_dict:
-        user_dict.pop(callback.message.chat.id)
-    await callback.message.edit_text(f"Добавлен {SACRED.lower()} осколок в {temp[0]}, {temp[1]}")
+    temp = user_dict[int(callback.from_user.id)]
+    await send_request(callback.from_user.id, "sacred", temp)
+    if callback.from_user.id in user_dict:
+        user_dict.pop(callback.from_user.id)
+    await callback.message.edit_text(f"Добавлен '{SACRED}' осколок в '{temp[0]}, {temp[1]}'")
     await callback.answer()
 
 
+async def send_request(user_id, shard, user_locations):
+    json_string = {
+        "user_id": f"{user_id}",
+        "time": f"{datetime.datetime.now()}",
+        "shard": f"{shard}",
+        "location": f"{user_locations[0]}",
+        "under_location": f"{user_locations[1]}"
+    }
+
+    print(json_string)
+
+
 if __name__ == '__main__':
-    executor.start_polling(dispatcher, skip_updates=True)
+    executor.start_polling(dispatcher)
