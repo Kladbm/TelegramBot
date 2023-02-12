@@ -1,3 +1,4 @@
+import requests
 import datetime
 import logging
 import json
@@ -480,15 +481,21 @@ async def ancient_call(callback: types.CallbackQuery):
 
 
 async def send_request(user_id, shard, user_locations):
+
+    url = "http://localhost:8080/api/shards"
+
+    time = datetime.datetime.now().strftime("%d-%b-%Y %H:%M:%S.%f")[0:23]
     json_string = {
         "user_id": f"{user_id}",
-        "time": f"{datetime.datetime.now()}",
+        "date_time": f"{time}",
         "shard": f"{shard}",
-        "location": f"{user_locations[0]}",
-        "under_location": f"{user_locations[1]}"
+        "first_location": f"{user_locations[0]}",
+        "second_location": f"{user_locations[1]}"
     }
 
     print(json_string)
+
+    requests.post(url, json=json_string)
 
 
 if __name__ == '__main__':
